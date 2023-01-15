@@ -39,7 +39,7 @@ public class JackyClientFactoryBean implements FactoryBean<Object>, ApplicationC
             }
         }
 
-        Proxy.newProxyInstance()
+        //Proxy.newProxyInstance()
         return null;
     }
 
