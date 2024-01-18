@@ -1,2 +1,2 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-  com.example.springboot.config.HelloServiceAutoConfig
+  com.jacky.rpc.config.HelloServiceAutoConfig
