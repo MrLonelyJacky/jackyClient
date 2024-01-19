@@ -1,8 +1,13 @@
 package com.jacky.rpc.consumer;
 
 import com.jacky.rpc.anno.RpcAutowired;
+import com.netflix.loadbalancer.ILoadBalancer;
 import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.InitializingBean;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.BeanPostProcessor;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Component;
 
 import java.lang.reflect.Field;
@@ -19,6 +24,10 @@ import java.lang.reflect.Proxy;
 public class RpcConsumerPostProcessor implements BeanPostProcessor {
     //todo log
 
+
+    @Autowired
+    private ILoadBalancer loadBalancer;
+
     @Override
     public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
 
@@ -29,12 +38,8 @@ public class RpcConsumerPostProcessor implements BeanPostProcessor {
             if (field.isAnnotationPresent(RpcAutowired.class)) {
                 RpcAutowired rpcReference = field.getAnnotation(RpcAutowired.class);
                 Class<?> fieldType = field.getType();
-                Object proxyInstance = Proxy.newProxyInstance(fieldType.getClassLoader(), new Class[]{fieldType}, new InvocationHandler() {
-                    @Override
-                    public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-                        return null;
-                    }
-                });
+                Object proxyInstance = Proxy.newProxyInstance(fieldType.getClassLoader(),
+                        new Class[]{fieldType}, new RpcProxyHandler(rpcReference, loadBalancer));
                 field.setAccessible(true);
                 try {
                     field.set(bean, proxyInstance);
@@ -44,6 +49,8 @@ public class RpcConsumerPostProcessor implements BeanPostProcessor {
                 }
             }
         }
+
+
         return bean;
     }
 }

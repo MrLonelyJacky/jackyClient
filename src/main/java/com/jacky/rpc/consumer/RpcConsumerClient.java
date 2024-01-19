@@ -1,6 +1,10 @@
 package com.jacky.rpc.consumer;
 
+import com.jacky.rpc.protocal.RpcProtocol;
+import com.jacky.rpc.protocal.RpcRequest;
+import com.netflix.loadbalancer.Server;
 import io.netty.bootstrap.Bootstrap;
+import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
@@ -49,7 +53,12 @@ public class RpcConsumerClient {
 
     }
 
-    public void sendData() {
-        this.bootstrap.connect();
+    public void sendData(RpcProtocol<RpcRequest> protocol, Server chooseServer) throws InterruptedException {
+        if (chooseServer != null) {
+            ChannelFuture channelFuture = this.bootstrap.connect(chooseServer.getHost(), chooseServer.getPort()).sync();
+            ChannelFuture writeAndFlush = channelFuture.channel().writeAndFlush(protocol);
+            //todo how to close the channel
+        }
+
     }
 }

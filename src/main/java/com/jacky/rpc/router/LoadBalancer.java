@@ -10,4 +10,6 @@ import com.jacky.rpc.common.ServiceMeta;
 public interface LoadBalancer {
 
     ServiceMeta choose(String serviceId);
+
+
 }

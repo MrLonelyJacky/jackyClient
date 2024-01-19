@@ -1,5 +1,7 @@
 package com.jacky.rpc.anno;
 
+import com.jacky.rpc.common.constant.LoadBalancerType;
+
 import java.lang.annotation.*;
 
 /**
@@ -28,6 +30,12 @@ public @interface RpcAutowired {
      * @return
      */
     long retryCount() default 3;
+
+    /**
+     * 负载均衡方式
+     * @return
+     */
+    LoadBalancerType loadBalancer() default LoadBalancerType.ROUND_ROBIN;
 
 
 }
