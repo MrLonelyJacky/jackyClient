@@ -8,11 +8,11 @@
         <version>2.7.10</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-    <groupId>com.xhystudy</groupId>
+    <groupId>com.jacky</groupId>
     <artifactId>interface</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>dubbo-interface</name>
-    <description>dubbo 中间层</description>
+    <name>rpc-interface</name>
+    <description>interface 中间层</description>
     <properties>
         <java.version>1.8</java.version>
     </properties>

@@ -2,6 +2,10 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/jackyConsumer/demo.iml" filepath="$PROJECT_DIR$/jackyConsumer/demo.iml" />
+      <module fileurl="file://$PROJECT_DIR$/JackyProvider/demo (1) (org.xhystudy.rpc-privider-1).iml" filepath="$PROJECT_DIR$/JackyProvider/demo (1) (org.xhystudy.rpc-privider-1).iml" />
+      <module fileurl="file://$PROJECT_DIR$/interface/interface.iml" filepath="$PROJECT_DIR$/interface/interface.iml" />
+      <module fileurl="file://$PROJECT_DIR$/jackyRpc/jacky-client.iml" filepath="$PROJECT_DIR$/jackyRpc/jacky-client.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/jackyClient.iml" filepath="$PROJECT_DIR$/.idea/jackyClient.iml" />
     </modules>
   </component>

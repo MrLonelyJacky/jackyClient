@@ -3,4 +3,15 @@
   <component name="JavaScriptSettings">
     <option name="languageLevel" value="ES6" />
   </component>
+  <component name="MavenProjectsManager">
+    <option name="originalFiles">
+      <list>
+        <option value="$PROJECT_DIR$/jackyRpc/pom.xml" />
+        <option value="$PROJECT_DIR$/interface/pom.xml" />
+        <option value="$PROJECT_DIR$/jackyConsumer/pom.xml" />
+        <option value="$PROJECT_DIR$/JackyProvider/pom.xml" />
+      </list>
+    </option>
+  </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_13" default="false" project-jdk-name="1.8" project-jdk-type="JavaSDK" />
 </project>
