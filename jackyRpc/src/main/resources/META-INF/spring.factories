@@ -1,2 +1,2 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-  com.jacky.rpc.config.LoadBalanceConfig
+com.jacky.rpc.config.JackyClientConfig

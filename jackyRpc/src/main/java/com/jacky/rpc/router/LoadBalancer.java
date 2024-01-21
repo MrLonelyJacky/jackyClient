@@ -11,5 +11,4 @@ public interface LoadBalancer {
 
     ServiceMeta choose(String serviceId);
 
-
 }

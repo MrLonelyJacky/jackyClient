@@ -1,14 +1,11 @@
 package org.jacky.rpc.demo.controller;
 
 import com.jacky.rpc.anno.RpcAutowired;
+import org.demo.rpc.demo.Test2Service;
+import org.demo.rpc.demo.TestService;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import org.xhystudy.rpc.demo.Test2Service;
-import org.xhystudy.rpc.demo.TestService;
-
-import java.util.concurrent.atomic.AtomicInteger;
 
 
 /**
@@ -18,10 +15,10 @@ import java.util.concurrent.atomic.AtomicInteger;
 @RestController
 public class Test {
 
-    @RpcAutowired
+    @RpcAutowired(serviceName = "lease-provider")
     TestService testService;
 
-    @RpcAutowired
+    @RpcAutowired(serviceName = "lease-provider")
     Test2Service test2Service;
 
     /**

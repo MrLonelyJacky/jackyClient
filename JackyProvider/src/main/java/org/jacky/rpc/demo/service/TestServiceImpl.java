@@ -1,16 +1,13 @@
-package org.xhystudy.rpc.demo.service;
+package org.jacky.rpc.demo.service;
 
-import org.xhystudy.rpc.demo.TestService;
-import org.xhystudy.rpc.annotation.RpcService;
+
+import org.demo.rpc.demo.TestService;
 
 /**
  * @description:
- * @Author: Xhy
- * @gitee: https://gitee.com/XhyQAQ
- * @copyright: B站: https://space.bilibili.com/152686439?spm_id_from=333.1007.0.0
- * @CreateTime: 2023-04-12 11:15
+ * @Author: jacky
  */
-@RpcService
+
 public class TestServiceImpl implements TestService {
 
     @Override

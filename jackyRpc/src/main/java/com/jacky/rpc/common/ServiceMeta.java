@@ -21,5 +21,7 @@ public class ServiceMeta implements Serializable {
 
     private int servicePort;
 
+    private String serviceIp;
+
 
 }

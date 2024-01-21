@@ -35,7 +35,7 @@ public @interface RpcAutowired {
      * 负载均衡方式
      * @return
      */
-    LoadBalancerType loadBalancer() default LoadBalancerType.ROUND_ROBIN;
+    String serviceName();
 
 
 }

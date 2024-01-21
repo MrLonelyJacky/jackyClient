@@ -1,4 +1,4 @@
-package org.xhystudy.rpc.demo;
+package org.demo.rpc.demo;
 
 /**
  * @description:

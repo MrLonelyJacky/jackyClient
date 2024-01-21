@@ -2,12 +2,14 @@ package com.jacky.rpc.consumer;
 
 import com.jacky.rpc.anno.RpcAutowired;
 import com.jacky.rpc.common.RpcRequestHolder;
+import com.jacky.rpc.common.ServiceMeta;
 import com.jacky.rpc.protocal.MsgHeader;
 import com.jacky.rpc.protocal.RpcProtocol;
 import com.jacky.rpc.protocal.RpcRequest;
 import com.jacky.rpc.protocal.RpcResponse;
 import com.jacky.rpc.protocal.constant.MsgType;
 import com.jacky.rpc.protocal.constant.ProtocolConstants;
+import com.jacky.rpc.router.LoadBalancer;
 import com.netflix.loadbalancer.ILoadBalancer;
 import com.netflix.loadbalancer.Server;
 import io.netty.channel.DefaultEventLoop;
@@ -28,8 +30,8 @@ import java.util.concurrent.TimeUnit;
  **/
 public class RpcProxyHandler implements InvocationHandler {
     private final RpcAutowired rpcAutowired;
-    private final ILoadBalancer loadBalancer;
-    public RpcProxyHandler(RpcAutowired rpcAutowired, ILoadBalancer loadBalancer) {
+    private final LoadBalancer loadBalancer;
+    public RpcProxyHandler(RpcAutowired rpcAutowired, LoadBalancer loadBalancer) {
         this.rpcAutowired = rpcAutowired;
         this.loadBalancer = loadBalancer;
     }
@@ -63,7 +65,7 @@ public class RpcProxyHandler implements InvocationHandler {
         protocol.setBody(request);
         //todo 过滤器或拦截器在请求之前做拓展
         //路由发现和负载均衡
-        Server chooseServer = loadBalancer.chooseServer("default");
+        ServiceMeta chooseServer = loadBalancer.choose(rpcAutowired.serviceName());
         Promise<RpcResponse> defaultPromise = new DefaultPromise<>(new DefaultEventLoop());
         RpcRequestHolder.REQUEST_MAP.put(header.getRequestId(), defaultPromise);
         //todo 重试机制

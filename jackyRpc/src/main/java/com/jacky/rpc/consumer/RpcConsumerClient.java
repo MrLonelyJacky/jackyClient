@@ -1,5 +1,6 @@
 package com.jacky.rpc.consumer;
 
+import com.jacky.rpc.common.ServiceMeta;
 import com.jacky.rpc.protocal.RpcProtocol;
 import com.jacky.rpc.protocal.RpcRequest;
 import com.jacky.rpc.protocal.handler.MessageCodecSharable;
@@ -58,9 +59,9 @@ public class RpcConsumerClient {
 
     }
 
-    public void sendData(RpcProtocol<RpcRequest> protocol, Server chooseServer) throws InterruptedException {
+    public void sendData(RpcProtocol<RpcRequest> protocol, ServiceMeta chooseServer) throws InterruptedException {
         if (chooseServer != null) {
-            ChannelFuture channelFuture = this.bootstrap.connect(chooseServer.getHost(), chooseServer.getPort()).sync();
+            ChannelFuture channelFuture = this.bootstrap.connect(chooseServer.getServiceIp(), chooseServer.getServicePort()).sync();
             ChannelFuture writeAndFlush = channelFuture.channel().writeAndFlush(protocol);
             //todo how to close the channel
         }
