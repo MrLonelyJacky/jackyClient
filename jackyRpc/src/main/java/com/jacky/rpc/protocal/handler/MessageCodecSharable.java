@@ -56,7 +56,6 @@ public class MessageCodecSharable extends MessageToMessageCodec<ByteBuf, RpcProt
         byte version = in.readByte();
         byte messageType = in.readByte();
         long sequenceId = in.readLong();
-        in.readByte();
         int length = in.readInt();
         byte[] bytes = new byte[length];
         in.readBytes(bytes, 0, length);

@@ -86,6 +86,11 @@ public class RpcNacosProperties {
     private int port = -1;
 
     /**
+     * weight for service instance, the larger the value, the larger the weight.
+     */
+    private float weight = 1;
+
+    /**
      * whether your service is a https service.
      */
     private boolean secure = false;
@@ -277,6 +282,14 @@ public class RpcNacosProperties {
 
     public void setNamingLoadCacheAtStart(String namingLoadCacheAtStart) {
         this.namingLoadCacheAtStart = namingLoadCacheAtStart;
+    }
+
+    public float getWeight() {
+        return weight;
+    }
+
+    public void setWeight(float weight) {
+        this.weight = weight;
     }
 
     public Properties getNacosProperties() {

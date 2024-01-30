@@ -1,6 +1,7 @@
 package org.jacky.rpc.demo.service;
 
 
+import com.jacky.rpc.anno.RpcService;
 import org.demo.rpc.demo.Test2Service;
 
 /**
@@ -8,6 +9,7 @@ import org.demo.rpc.demo.Test2Service;
  * @Author: Xhy
  *
  */
+@RpcService
 public class Test2ServiceImpl implements Test2Service {
 
     @Override

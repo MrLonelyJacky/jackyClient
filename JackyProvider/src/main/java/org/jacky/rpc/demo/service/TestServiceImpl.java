@@ -1,13 +1,14 @@
 package org.jacky.rpc.demo.service;
 
 
+import com.jacky.rpc.anno.RpcService;
 import org.demo.rpc.demo.TestService;
 
 /**
  * @description:
  * @Author: jacky
  */
-
+@RpcService
 public class TestServiceImpl implements TestService {
 
     @Override
