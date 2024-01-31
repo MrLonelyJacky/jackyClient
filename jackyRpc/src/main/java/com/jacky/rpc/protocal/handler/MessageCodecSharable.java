@@ -67,7 +67,7 @@ public class MessageCodecSharable extends MessageToMessageCodec<ByteBuf, RpcProt
         header.setVersion(version);
         header.setRequestId(sequenceId);
         header.setMsgType(messageType);
-        header.setSerializations(bytes);
+        //header.setSerializations(bytes);
         header.setMsgLen(length);
         switch (byType){
             //请求消息

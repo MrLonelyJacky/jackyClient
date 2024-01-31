@@ -55,7 +55,7 @@ public class JsonSerialization implements RpcSerialization {
     @Override
     public <T> T deserialize(byte[] data, Class<T> clz) throws IOException {
         final T t = MAPPER.readValue(data, clz);
-        if (clz.equals(RpcRequest.class)) {
+        /*if (clz.equals(RpcRequest.class)) {
             RpcRequest rpcRequest = ((RpcRequest)t);
 
             rpcRequest.setData(convertReq(rpcRequest.getData(),rpcRequest.getDataClass()));
@@ -64,7 +64,8 @@ public class JsonSerialization implements RpcSerialization {
             RpcResponse rpcResponse = ((RpcResponse)t);
             rpcResponse.setData(convertRes(rpcResponse.getData(),rpcResponse.getDataClass()));
             return (T) rpcResponse;
-        }
+        }*/
+        return t;
     }
 
     public Object convertReq(Object data,Class clazz) {

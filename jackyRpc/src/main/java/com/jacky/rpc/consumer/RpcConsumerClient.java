@@ -5,6 +5,7 @@ import com.jacky.rpc.protocal.RpcProtocol;
 import com.jacky.rpc.protocal.RpcRequest;
 import com.jacky.rpc.protocal.handler.MessageCodecSharable;
 import com.jacky.rpc.protocal.handler.ProcotolFrameDecoder;
+import com.jacky.rpc.protocal.handler.RpcResponseHandler;
 import com.netflix.loadbalancer.Server;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.ChannelFuture;
@@ -53,7 +54,8 @@ public class RpcConsumerClient {
                     protected void initChannel(NioSocketChannel nioSocketChannel) throws Exception {
                         //todo 编码解码器
                         nioSocketChannel.pipeline().addLast(new ProcotolFrameDecoder())
-                                .addLast(messageCodecSharable);
+                                .addLast(messageCodecSharable)
+                                .addLast(new RpcResponseHandler());
                     }
                 });
 
