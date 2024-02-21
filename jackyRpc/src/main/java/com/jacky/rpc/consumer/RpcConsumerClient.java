@@ -8,13 +8,15 @@ import com.jacky.rpc.protocal.handler.ProcotolFrameDecoder;
 import com.jacky.rpc.protocal.handler.RpcResponseHandler;
 import com.netflix.loadbalancer.Server;
 import io.netty.bootstrap.Bootstrap;
-import io.netty.channel.ChannelFuture;
-import io.netty.channel.ChannelInitializer;
-import io.netty.channel.EventLoopGroup;
+import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @Author: jacky
@@ -27,6 +29,7 @@ public class RpcConsumerClient {
     //客户端work group
     private EventLoopGroup eventLoopGroup;
     private Logger logger = LoggerFactory.getLogger(RpcConsumerClient.class);
+
 
     private static volatile RpcConsumerClient rpcConsumerClient;
 
@@ -63,8 +66,21 @@ public class RpcConsumerClient {
     public void sendData(RpcProtocol<RpcRequest> protocol, ServiceMeta chooseServer) throws InterruptedException {
         if (chooseServer != null) {
             ChannelFuture channelFuture = this.bootstrap.connect(chooseServer.getServiceIp(), chooseServer.getServicePort()).sync();
+            channelFuture.addListener((ChannelFutureListener) channelFuture1 -> {
+                if (channelFuture1.isSuccess()) {
+                    logger.info("连接 rpc server {} 端口 {} 成功.", chooseServer.getServiceIp(), chooseServer.getServicePort());
+                } else {
+                    logger.error("连接 rpc server {} 端口 {} 失败.", chooseServer.getServiceIp(), chooseServer.getServicePort());
+                    channelFuture1.cause().printStackTrace();
+                }
+            });
             ChannelFuture writeAndFlush = channelFuture.channel().writeAndFlush(protocol);
-            //todo how to close the channel
+            writeAndFlush.addListener((ChannelFutureListener) channelFuture12 -> {
+                Channel channel = writeAndFlush.channel();
+                channel.close();
+                logger.info("发送完数据，关闭通道！");
+            });
+
         }
 
     }
