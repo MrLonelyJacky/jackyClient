@@ -26,7 +26,8 @@ import org.springframework.stereotype.Component;
 /**
  * @Author: jacky
  * @Date:2024/1/24 11:42
- * @Description:
+ * @Description: rpc 服务提供者启动starter spring容器启动后完成两件事
+ * 1、开启服务端netty   2、将ip端口注册到nacos中
  **/
 @Component
 public class ProviderStarter implements SmartLifecycle, EnvironmentAware {
@@ -44,7 +45,7 @@ public class ProviderStarter implements SmartLifecycle, EnvironmentAware {
     private boolean isRunning;
     private Environment environment;
 
-    //todo log
+
     @Override
     public boolean isAutoStartup() {
         return true;
@@ -92,6 +93,12 @@ public class ProviderStarter implements SmartLifecycle, EnvironmentAware {
 
     }
 
+    /**
+     * 向nacos注册
+     * @param addr 地址
+     * @param port ip
+     * @throws NacosException
+     */
     private void registerNacos(String addr, int port) throws NacosException {
         NamingService namingService = NacosFactory.createNamingService(rpcNacosProperties.getNacosProperties());
         Instance instance = new Instance();
@@ -108,6 +115,7 @@ public class ProviderStarter implements SmartLifecycle, EnvironmentAware {
         boss.shutdownGracefully();
         work.shutdownGracefully();
         isRunning = false;
+        logger.info("netty close......");
     }
 
     @Override

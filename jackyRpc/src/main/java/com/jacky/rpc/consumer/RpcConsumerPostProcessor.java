@@ -1,7 +1,10 @@
 package com.jacky.rpc.consumer;
 
 import com.jacky.rpc.anno.RpcAutowired;
+import com.jacky.rpc.provider.ProviderStarter;
 import com.jacky.rpc.router.LoadBalancer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.BeanPostProcessor;
@@ -17,7 +20,6 @@ import java.lang.reflect.Proxy;
  **/
 @Component
 public class RpcConsumerPostProcessor implements BeanPostProcessor {
-    //todo log
 
 
     @Autowired
@@ -39,13 +41,10 @@ public class RpcConsumerPostProcessor implements BeanPostProcessor {
                 try {
                     field.set(bean, proxyInstance);
                 } catch (IllegalAccessException e) {
-                    //todo log
                     e.printStackTrace();
                 }
             }
         }
-
-
         return bean;
     }
 }

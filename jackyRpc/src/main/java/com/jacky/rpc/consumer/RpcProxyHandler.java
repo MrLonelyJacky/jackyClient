@@ -26,7 +26,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * @Author: jacky
  * @Date:2024/1/18 11:58
- * @Description:
+ * @Description: rpc代理层  对所有使用@RpcAutowired的成员进行代理
  **/
 public class RpcProxyHandler implements InvocationHandler {
     private final RpcAutowired rpcAutowired;
@@ -40,17 +40,11 @@ public class RpcProxyHandler implements InvocationHandler {
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
         //具体调用的逻辑
         RpcProtocol<RpcRequest> protocol = new RpcProtocol<>();
+        //构建请求头
         MsgHeader header = new MsgHeader();
-
         header.setMagic(ProtocolConstants.MAGIC);
         header.setVersion(ProtocolConstants.VERSION);
-        //todo 是否考虑uuId
-        //header.setRequestId(UUID.randomUUID().toString());
         header.setRequestId(RpcRequestHolder.REQUEST_ID_GEN.incrementAndGet());
-        //todo 序列化
-        /*final byte[] serialization = RpcProperties.getInstance().getSerialization().getBytes();
-        header.setSerializationLen(serialization.length);
-        header.setSerializations(serialization);*/
         header.setMsgType((byte) MsgType.REQUEST.ordinal());
         header.setStatus((byte) 0x1);
         protocol.setHeader(header);

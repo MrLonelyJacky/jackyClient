@@ -52,7 +52,6 @@ public class RpcConsumerClient {
                 .handler(new ChannelInitializer<NioSocketChannel>() {
                     @Override
                     protected void initChannel(NioSocketChannel nioSocketChannel) throws Exception {
-                        //todo 编码解码器
                         nioSocketChannel.pipeline().addLast(new ProcotolFrameDecoder())
                                 .addLast(messageCodecSharable)
                                 .addLast(new RpcResponseHandler());

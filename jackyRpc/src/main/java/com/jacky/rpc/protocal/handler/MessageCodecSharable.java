@@ -18,7 +18,9 @@ import java.util.List;
 /**
  * @Author: jacky
  * @Date:2024/1/19 19:44
- * @Description: 编码解码器
+ * @Description: 编码解码器 协议格式如下：
+ * 头信息：魔术、版本号、消息类型、请求id、消息长度
+ * 消息体：发送的内容
  **/
 @ChannelHandler.Sharable
 public class MessageCodecSharable extends MessageToMessageCodec<ByteBuf, RpcProtocol<Object>> {

@@ -10,7 +10,7 @@ import io.netty.util.concurrent.Promise;
 /**
  * @Author: jacky
  * @Date:2024/1/20 13:26
- * @Description: 结果处理器，将结果放入promise中 todo 是否可以设计成shareable 理解改用法
+ * @Description: 结果处理器，将结果放入promise中
  **/
 public class RpcResponseHandler extends SimpleChannelInboundHandler<RpcProtocol<RpcResponse>> {
 
