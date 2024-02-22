@@ -82,7 +82,6 @@ public class ProviderStarter implements ApplicationListener<ContextRefreshedEven
                 logger.info("ShutdownHook execute end...");
             }, "shutDown-thread"));
         } catch (InterruptedException | NacosException e) {
-            e.printStackTrace();
             throw new RuntimeException("启动失败：{}", e);
         } finally {
             boss.shutdownGracefully();

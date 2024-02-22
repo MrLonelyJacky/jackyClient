@@ -1,5 +1,6 @@
 package com.jacky.rpc.protocal.handler;
 
+import com.jacky.rpc.exception.RpcException;
 import com.jacky.rpc.protocal.MsgHeader;
 import com.jacky.rpc.protocal.RpcProtocol;
 import com.jacky.rpc.protocal.RpcRequest;
@@ -8,6 +9,8 @@ import com.jacky.rpc.protocal.constant.MsgType;
 import com.jacky.rpc.provider.RpcServiceMapUtil;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -20,6 +23,7 @@ import java.util.List;
  */
 public class RpcRequestHandler extends SimpleChannelInboundHandler<RpcProtocol<RpcRequest>> {
 
+    private Logger logger = LoggerFactory.getLogger(RpcRequestHandler.class);
 
     @Override
     protected void channelRead0(ChannelHandlerContext channelHandlerContext, RpcProtocol<RpcRequest> rpcRequest) throws Exception {
@@ -30,7 +34,8 @@ public class RpcRequestHandler extends SimpleChannelInboundHandler<RpcProtocol<R
             rpcResponse.setData(result);
             rpcResponse.setDataClass(result == null ? null : result.getClass());
         } catch (Exception e) {
-            rpcResponse.setException(e);
+            logger.error("处理请求异常：",e);
+            rpcResponse.setException(new RpcException("请求调用方法失败：" + e.getCause().getMessage()));
         }
         RpcProtocol<RpcResponse> responseRpcProtocol = new RpcProtocol<>();
         MsgHeader originHeader = rpcRequest.getHeader();
