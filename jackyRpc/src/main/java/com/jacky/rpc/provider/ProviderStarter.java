@@ -79,7 +79,6 @@ public class ProviderStarter implements SmartLifecycle, EnvironmentAware {
             String addr = environment.getProperty("rpc.serverAddr");
             int port = Integer.parseInt(environment.getProperty("rpc.port"));
             logger.info("netty start bind addr:{},port:{}", addr, port);
-            //todo 端口改为读取配置
             ChannelFuture sync = serverBootstrap.bind(addr, port).sync();
             registerNacos(addr, port);
             isRunning = true;

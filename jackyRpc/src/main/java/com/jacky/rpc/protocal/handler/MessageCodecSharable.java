@@ -92,9 +92,7 @@ public class MessageCodecSharable extends MessageToMessageCodec<ByteBuf, RpcProt
                     out.add(protocol);
                 }
                 break;
-                //todo 是否要维护心跳
             default:
-                //todo 抛异常还是日志记录
                 throw new RuntimeException("无效消息！");
         }
 
