@@ -9,13 +9,14 @@ import com.jacky.rpc.provider.RpcServiceMapUtil;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.List;
 
 /**
  * @Author: jacky
  * @Date:2024/1/20 13:26
- * @Description:  完成请求调用的handler 找到对应的类，并调用方法
+ * @Description: 完成请求调用的handler 找到对应的类，并调用方法
  */
 public class RpcRequestHandler extends SimpleChannelInboundHandler<RpcProtocol<RpcRequest>> {
 
@@ -23,15 +24,14 @@ public class RpcRequestHandler extends SimpleChannelInboundHandler<RpcProtocol<R
     @Override
     protected void channelRead0(ChannelHandlerContext channelHandlerContext, RpcProtocol<RpcRequest> rpcRequest) throws Exception {
         RpcRequest requestBody = rpcRequest.getBody();
-        String className = requestBody.getClassName();
-        String methodName = requestBody.getMethodName();
-        Class<?>[] parameterTypes = requestBody.getParameterTypes();
-        //Object[] data = {requestBody.getData()};
-        Object service = RpcServiceMapUtil.getService(className);
-        Method method = service.getClass().getMethod(methodName, parameterTypes);
-        method.setAccessible(true);
-        List<Object> dataList = (List<Object>) requestBody.getData();
-        Object result = method.invoke(service, dataList.toArray());
+        RpcResponse rpcResponse = new RpcResponse();
+        try {
+            Object result = submitRequest(requestBody);
+            rpcResponse.setData(result);
+            rpcResponse.setDataClass(result == null ? null : result.getClass());
+        } catch (Exception e) {
+            rpcResponse.setException(e);
+        }
         RpcProtocol<RpcResponse> responseRpcProtocol = new RpcProtocol<>();
         MsgHeader originHeader = rpcRequest.getHeader();
         MsgHeader header = new MsgHeader();
@@ -39,12 +39,28 @@ public class RpcRequestHandler extends SimpleChannelInboundHandler<RpcProtocol<R
         header.setMsgType((byte) MsgType.RESPONSE.ordinal());
         header.setRequestId(originHeader.getRequestId());
         header.setVersion(originHeader.getVersion());
-        //todo 异常处理
         responseRpcProtocol.setHeader(header);
-        RpcResponse rpcResponse = new RpcResponse();
-        rpcResponse.setData(result);
-        rpcResponse.setDataClass(result == null ? null : result.getClass());
         responseRpcProtocol.setBody(rpcResponse);
         channelHandlerContext.writeAndFlush(responseRpcProtocol);
+    }
+
+    /**
+     * 提交处理请求 通过反射找到方法和参数 调用方法
+     *
+     * @param requestBody
+     * @return 调用结果
+     * @throws NoSuchMethodException
+     * @throws IllegalAccessException
+     * @throws InvocationTargetException
+     */
+    private Object submitRequest(RpcRequest requestBody) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
+        String className = requestBody.getClassName();
+        String methodName = requestBody.getMethodName();
+        Class<?>[] parameterTypes = requestBody.getParameterTypes();
+        Object service = RpcServiceMapUtil.getService(className);
+        Method method = service.getClass().getMethod(methodName, parameterTypes);
+        method.setAccessible(true);
+        List<Object> dataList = (List<Object>) requestBody.getData();
+        return method.invoke(service, dataList.toArray());
     }
 }
