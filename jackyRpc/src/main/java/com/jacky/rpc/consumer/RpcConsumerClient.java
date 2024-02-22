@@ -75,11 +75,7 @@ public class RpcConsumerClient {
                 }
             });
             ChannelFuture writeAndFlush = channelFuture.channel().writeAndFlush(protocol);
-            writeAndFlush.addListener((ChannelFutureListener) channelFuture12 -> {
-                Channel channel = writeAndFlush.channel();
-                channel.close();
-                logger.info("发送完数据，关闭通道！");
-            });
+            //todo 疑问channel不用关闭吗？
 
         }
 

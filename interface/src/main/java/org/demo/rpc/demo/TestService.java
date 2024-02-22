@@ -13,4 +13,6 @@ public interface TestService {
     void test(String key);
 
     void test2(String key);
+
+    void testParam(String key,String key2);
 }

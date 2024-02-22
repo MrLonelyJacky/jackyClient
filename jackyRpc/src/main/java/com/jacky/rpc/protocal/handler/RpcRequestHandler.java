@@ -10,11 +10,12 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 
 import java.lang.reflect.Method;
+import java.util.List;
 
 /**
  * @Author: jacky
  * @Date:2024/1/20 13:26
- * @Description:
+ * @Description:  完成请求调用的handler 找到对应的类，并调用方法
  */
 public class RpcRequestHandler extends SimpleChannelInboundHandler<RpcProtocol<RpcRequest>> {
 
@@ -29,8 +30,8 @@ public class RpcRequestHandler extends SimpleChannelInboundHandler<RpcProtocol<R
         Object service = RpcServiceMapUtil.getService(className);
         Method method = service.getClass().getMethod(methodName, parameterTypes);
         method.setAccessible(true);
-        //todo 目前只支持一个参数的方法调用
-        Object result = method.invoke(service, requestBody.getData());
+        List<Object> dataList = (List<Object>) requestBody.getData();
+        Object result = method.invoke(service, dataList.toArray());
         RpcProtocol<RpcResponse> responseRpcProtocol = new RpcProtocol<>();
         MsgHeader originHeader = rpcRequest.getHeader();
         MsgHeader header = new MsgHeader();
@@ -42,7 +43,7 @@ public class RpcRequestHandler extends SimpleChannelInboundHandler<RpcProtocol<R
         responseRpcProtocol.setHeader(header);
         RpcResponse rpcResponse = new RpcResponse();
         rpcResponse.setData(result);
-        rpcResponse.setDataClass(result.getClass());
+        rpcResponse.setDataClass(result == null ? null : result.getClass());
         responseRpcProtocol.setBody(rpcResponse);
         channelHandlerContext.writeAndFlush(responseRpcProtocol);
     }

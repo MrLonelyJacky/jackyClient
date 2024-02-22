@@ -17,7 +17,7 @@ public class RpcRequest implements Serializable {
     private String className;
     private String methodName;
     private Object data;
-    private Class dataClass;
+    //private Class dataClass;
     private Class<?>[] parameterTypes;
     private Map<String,Object> serviceAttachments;
     private Map<String,Object> clientAttachments;

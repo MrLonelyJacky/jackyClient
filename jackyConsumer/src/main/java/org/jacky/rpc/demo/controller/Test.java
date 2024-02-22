@@ -33,6 +33,12 @@ public class Test {
         return "test1 ok";
     }
 
+    @RequestMapping("test/{key}/{key2}")
+    public String testParams(@PathVariable String key,@PathVariable String key2){
+        testService.testParam(key,key2);
+        return "test1 ok";
+    }
+
     /**
      * 一致性哈希
      * @param key

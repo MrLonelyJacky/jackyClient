@@ -54,9 +54,8 @@ public class RpcProxyHandler implements InvocationHandler {
         request.setClassName(method.getDeclaringClass().getName());
         request.setMethodName(method.getName());
         request.setParameterTypes(method.getParameterTypes());
-        //todo 目前只支持一个参数
-        request.setData(ObjectUtils.isEmpty(args) ? new Object[0] : args[0]);
-        request.setDataClass(ObjectUtils.isEmpty(args) ? null : args[0].getClass());
+        request.setData(ObjectUtils.isEmpty(args) ? new Object[0] : args);
+        //request.setDataClass(ObjectUtils.isEmpty(args) ? null : args[0].getClass());
         protocol.setBody(request);
         //todo 过滤器或拦截器在请求之前做拓展
         //路由发现和负载均衡
