@@ -29,7 +29,7 @@ public @interface RpcAutowired {
      * 重试次数
      * @return
      */
-    long retryCount() default 3;
+    int retryCount() default 3;
 
     /**
      * 负载均衡方式

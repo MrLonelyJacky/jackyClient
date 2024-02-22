@@ -16,6 +16,8 @@ import io.netty.channel.DefaultEventLoop;
 import io.netty.channel.nio.NioEventLoop;
 import io.netty.util.concurrent.DefaultPromise;
 import io.netty.util.concurrent.Promise;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.util.ObjectUtils;
 
 import java.lang.reflect.InvocationHandler;
@@ -31,6 +33,10 @@ import java.util.concurrent.TimeUnit;
 public class RpcProxyHandler implements InvocationHandler {
     private final RpcAutowired rpcAutowired;
     private final LoadBalancer loadBalancer;
+
+    private Logger logger = LoggerFactory.getLogger(RpcProxyHandler.class);
+
+
     public RpcProxyHandler(RpcAutowired rpcAutowired, LoadBalancer loadBalancer) {
         this.rpcAutowired = rpcAutowired;
         this.loadBalancer = loadBalancer;
@@ -62,15 +68,29 @@ public class RpcProxyHandler implements InvocationHandler {
         ServiceMeta chooseServer = loadBalancer.choose(rpcAutowired.serviceName());
         Promise<RpcResponse> defaultPromise = new DefaultPromise<>(new DefaultEventLoop());
         RpcRequestHolder.REQUEST_MAP.put(header.getRequestId(), defaultPromise);
-        //todo 重试机制
-        RpcConsumerClient.getConsumerInstance().sendData(protocol, chooseServer);
-        //todo 目前写死3s钟
-        RpcResponse rpcResponse = defaultPromise.get(3000, TimeUnit.MILLISECONDS);
-        if (rpcResponse.getException()!=null){
-            throw rpcResponse.getException();
-        }
-        //todo 拦截器在此请求后拓展
+        int retryCount = rpcAutowired.retryCount();
+        int count = 1;
+        while (count <= retryCount) {
+            try {
+                RpcConsumerClient.getConsumerInstance().sendData(protocol, chooseServer);
 
-        return rpcResponse.getData();
+                RpcResponse rpcResponse = defaultPromise.get(rpcAutowired.timeout(), TimeUnit.MILLISECONDS);
+                if (rpcResponse.getException() != null) {
+                    throw rpcResponse.getException();
+                }
+                logger.info("rpc 调用成功, serviceName: {}", rpcAutowired.serviceName());
+                //todo 过滤器或拦截器在此请求后拓展
+                return rpcResponse.getData();
+            } catch (Throwable throwable) {
+                logger.error("rpc 调用失败,进行第{}次重试,异常信息: {}", count, throwable.toString());
+                count++;
+                //重新负载选择新机器 todo 目前的设计就是失败重新选择节点
+                chooseServer = loadBalancer.choose(rpcAutowired.serviceName());
+            }
+
+        }
+
+
+        throw new RuntimeException("rpc调用服务" + rpcAutowired.serviceName() + "失败，超过重试次数" + rpcAutowired.retryCount());
     }
 }
