@@ -10,6 +10,7 @@
         <option value="$PROJECT_DIR$/interface/pom.xml" />
         <option value="$PROJECT_DIR$/jackyConsumer/pom.xml" />
         <option value="$PROJECT_DIR$/JackyProvider/pom.xml" />
+        <option value="$PROJECT_DIR$/JackyProvider2/pom.xml" />
       </list>
     </option>
   </component>
