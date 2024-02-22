@@ -72,7 +72,7 @@ public class RpcProxyHandler implements InvocationHandler {
         int count = 1;
         while (count <= retryCount) {
             try {
-                RpcConsumerClient.getConsumerInstance().sendData(protocol, chooseServer);
+                RpcConsumerClient.sendData(protocol, chooseServer);
 
                 RpcResponse rpcResponse = defaultPromise.get(rpcAutowired.timeout(), TimeUnit.MILLISECONDS);
                 if (rpcResponse.getException() != null) {
@@ -82,6 +82,7 @@ public class RpcProxyHandler implements InvocationHandler {
                 //todo 过滤器或拦截器在此请求后拓展
                 return rpcResponse.getData();
             } catch (Throwable throwable) {
+                throwable.printStackTrace();
                 logger.error("rpc 调用失败,进行第{}次重试,异常信息: {}", count, throwable.toString());
                 count++;
                 //重新负载选择新机器 todo 目前的设计就是失败重新选择节点

@@ -1,7 +1,6 @@
 package com.jacky.rpc.anno;
 
-import com.jacky.rpc.consumer.RpcConsumerPostProcessor;
-import com.jacky.rpc.consumer.RpcProviderBeanRegistry;
+import com.jacky.rpc.consumer.RpcBeanRegistry;
 import org.springframework.context.annotation.Import;
 
 import java.lang.annotation.ElementType;
@@ -16,6 +15,6 @@ import java.lang.annotation.Target;
  **/
 @Target({ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
-@Import(RpcProviderBeanRegistry.class)
-public @interface EnableRpcProvider {
+@Import(RpcBeanRegistry.class)
+public @interface EnableRpcClient {
 }

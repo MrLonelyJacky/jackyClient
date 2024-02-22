@@ -15,7 +15,7 @@ import org.springframework.beans.factory.support.BeanDefinitionRegistryPostProce
  * @Description:
  **/
 
-public class RpcProviderBeanRegistry implements BeanDefinitionRegistryPostProcessor {
+public class RpcBeanRegistry implements BeanDefinitionRegistryPostProcessor {
 
 
     @Override
@@ -26,6 +26,9 @@ public class RpcProviderBeanRegistry implements BeanDefinitionRegistryPostProces
         BeanDefinitionBuilder providerBuilder = BeanDefinitionBuilder.genericBeanDefinition(ProviderStarter.class);
         AbstractBeanDefinition providerBeanDefinition = providerBuilder.getBeanDefinition();
         beanDefinitionRegistry.registerBeanDefinition("providerStarter", providerBeanDefinition);
+        BeanDefinitionBuilder consumerBuilder = BeanDefinitionBuilder.genericBeanDefinition(RpcConsumerPostProcessor.class);
+        AbstractBeanDefinition consumerBuilderBeanDefinition = consumerBuilder.getBeanDefinition();
+        beanDefinitionRegistry.registerBeanDefinition("rpcConsumerPostProcessor", consumerBuilderBeanDefinition);
     }
 
     @Override
